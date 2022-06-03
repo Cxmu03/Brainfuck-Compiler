@@ -76,7 +76,6 @@ ir_list* generate_ir(char* code) {
         ir_list_append(irList, irInstruction);
         index++;
     }
-    printf("Why are we outside?\n");
     return irList;
 }
 
