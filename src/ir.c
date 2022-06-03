@@ -30,8 +30,9 @@ ir_list* generate_ir(char* code) {
     size_t index = 0;
     while (code[index] != '\0') {
         char instruction = code[index];
+
         ir_token token;
-        uint16_t value = 0;
+        int16_t value = 0;
         switch (instruction) {
         case '0':
             token = IR_CLEAR;
@@ -49,6 +50,7 @@ ir_list* generate_ir(char* code) {
         case '>':;
             int accumulatedMovements = accumulate_neighboring_moves(code, &index);
             if (accumulatedMovements == 0) {
+                index++;
                 continue;
             }
             token = IR_MOVE;
@@ -67,12 +69,14 @@ ir_list* generate_ir(char* code) {
             token = IR_INPUT;
             break;
         default:
+            index++;
             continue;
         }
         ir_instruction irInstruction = {token, value};
         ir_list_append(irList, irInstruction);
         index++;
     }
+    printf("Why are we outside?\n");
     return irList;
 }
 
@@ -94,9 +98,11 @@ void ir_list_append(ir_list* list, ir_instruction value) {
     newNode->value = value;
     if(!list->head) {
         list->head = newNode;
+        list->tail = newNode;
         return;
     }
     list->tail->next = newNode;
+    list->tail = newNode;
 }
 
 void ir_list_clear(ir_list* list) {

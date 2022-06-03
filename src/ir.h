@@ -15,7 +15,7 @@ typedef enum {
 
 typedef struct {
     ir_token token;
-    uint16_t value;
+    int16_t value;
 } ir_instruction;
 
 typedef struct ir_list_item {
@@ -27,6 +27,16 @@ typedef struct ir_list {
     ir_list_item* head;
     ir_list_item* tail;
 } ir_list;
+
+static const char* ir_token_strings[] = {
+        [IR_ADD] = "IR_ADD",
+        [IR_MOVE] = "IR_MOVE",
+        [IR_LOOP_START] = "IR_LOOP_START",
+        [IR_LOOP_END] = "IR_LOOP_END",
+        [IR_CLEAR] = "IR_CLEAR",
+        [IR_INPUT] = "IR_INPUT",
+        [IR_OUTPUT] = "IR_OUTPUT"
+};
 
 ir_list* ir_list_create_empty();
 ir_list* ir_list_create(ir_instruction instruction);
