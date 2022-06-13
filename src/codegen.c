@@ -11,33 +11,36 @@ static void print_asm_header(FILE* file) {
             file,
             "bits 64\n"
             "default rel\n"
+            "\n"
             "section .bss\n"
-            "    memory resb 3000\n"
-            "    memoryPointer resq 1\n"
-            "    outHandle resd 1\n"
+            "\tmemory resb 3000\n"
+            "\tmemoryPointer resq 1\n"
+            "\toutHandle resd 1\n"
+            "\n"
             "section .text\n"
-            "global main\n"
-            "extern ExitProcess\n"
-            "extern putchar\n"
-            "extern WriteConsoleA\n"
-            "extern GetStdHandle\n"
+            "\tglobal main\n"
+            "\textern ExitProcess\n"
+            "\textern putchar\n"
+            "\textern WriteConsoleA\n"
+            "\textern GetStdHandle\n"
+            "\n"
             "main:\n"
-            "    push    rbp\n"
-            "    mov     rbp, rsp\n"
-            "    sub     rsp, 32\n"
-            "    mov     rcx, -11\n"
-            "    call    GetStdHandle\n"
-            "    mov     [outHandle], rax\n"
-            "    mov     rax, memory\n"
-            "    mov     [memoryPointer], rax\n"
+            "\tpush    rbp\n"
+            "\tmov     rbp, rsp\n"
+            "\tsub     rsp, 32\n"
+            "\tmov     rcx, -11\n"
+            "\tcall    GetStdHandle\n"
+            "\tmov     [outHandle], rax\n"
+            "\tmov     rax, memory\n"
+            "\tmov     [memoryPointer], rax\n"
     );
 }
 
 static void print_asm_footer(FILE* file) {
     fprintf(
             file,
-            "    xor     rcx, rcx\n"
-            "    call    ExitProcess\n"
+            "\txor     rcx, rcx\n"
+            "\tcall    ExitProcess\n"
     );
 }
 
@@ -53,33 +56,36 @@ int generate_asm(const char* outputFilePath, ir_list* irList) {
         case IR_ADD:
             fprintf(
                     file,
-                    "    mov     eax, [memoryPointer] ;ADD\n"
-                    "    add     byte [eax], %d\n",
+                    "\tmov     eax, [memoryPointer] ;Adding %d to the current cell\n"
+                    "\tadd     byte [eax], %d\n",
+                    instruction.value,
                     instruction.value
             );
             break;
         case IR_MOVE:
             fprintf(
                     file,
-                    "    add     qword [memoryPointer], %d ;MOV\n",
+                    "\tadd     qword [memoryPointer], %d ;Moving %d cells\n",
+                    instruction.value,
                     instruction.value
             );
             break;
         case IR_CLEAR:
             fprintf(
                     file,
-                    "    mov     eax, [memoryPointer]\n"
-                    "    mov     byte [eax], 0\n"
+                    "\tmov     eax, [memoryPointer] ;Clearing current cell\n"
+                    "\tmov     byte [eax], 0\n"
             );
             break;
         case IR_LOOP_START:
             fprintf(
                     file,
-                    "    mov     eax, [memoryPointer] ;LPS\n"
-                    "    mov     al, [eax]\n"
-                    "    cmp     al, 0\n"
-                    "    je      LE%d\n"
-                    "    L%d:\n",
+                    "\n"
+                    "\tmov     eax, [memoryPointer] ;Loop start\n"
+                    "\tmov     al, [eax]\n"
+                    "\tcmp     al, 0\n"
+                    "\tje      LE%d\n"
+                    "\tL%d:\n",
                     loopStartCounter,
                     loopStartCounter
             );
@@ -89,11 +95,11 @@ int generate_asm(const char* outputFilePath, ir_list* irList) {
         case IR_LOOP_END:
             fprintf(
                     file,
-                    "    mov     eax, [memoryPointer] ;LPE\n"
-                    "    mov     al, [eax]\n"
-                    "    cmp     al, 0\n"
-                    "    jne     L%d\n"
-                    "    LE%d:\n",
+                    "\tmov     eax, [memoryPointer] ;Loop end\n"
+                    "\tmov     al, [eax]\n"
+                    "\tcmp     al, 0\n"
+                    "\tjne     L%d\n"
+                    "\tLE%d:\n",
                     stack_peek(loopEndStack),
                     stack_peek(loopEndStack)
             );
@@ -102,14 +108,15 @@ int generate_asm(const char* outputFilePath, ir_list* irList) {
         case IR_OUTPUT:
             fprintf(
                     file,
-                    "    mov     rcx, [outHandle]\n"
-                    "    mov     rdx, [memoryPointer]\n"
-                    "    mov     r8, 1\n"
-                    "    lea     r9, [rbp - 4]\n"
-                    "    push    0\n"
-                    "    call    WriteConsoleA\n"
+                    "\tmov     rcx, [outHandle] ;Printing ASCII value of current cell\n"
+                    "\tmov     rdx, [memoryPointer]\n"
+                    "\tmov     r8, 1\n"
+                    "\tlea     r9, [rbp - 4]\n"
+                    "\tpush    0\n"
+                    "\tcall    WriteConsoleA\n"
             );
         case IR_INPUT:
+            //TODO: Implement
             break;
         }
         listItem = listItem->next;

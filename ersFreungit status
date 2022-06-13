@@ -1,0 +1,235 @@
+warning: LF will be replaced by CRLF in example/main.c.
+The file will have its original line endings in your working directory
+[1mdiff --git a/example/main.c b/example/main.c[m
+[1mindex fca74bb..a4ed214 100644[m
+[1m--- a/example/main.c[m
+[1m+++ b/example/main.c[m
+[36m@@ -1,6 +1,6 @@[m
+ #include "../src/compiler.h"[m
+ [m
+ int main() {[m
+[31m-    compile("program.bf", "mandelbrot.asm");[m
+[32m+[m[32m    compile("program.bf", "../example/mandelbrot.asm");[m
+     return 0;[m
+ }[m
+[1mdiff --git a/example/mandelbrot.asm b/example/mandelbrot.asm[m
+[1mindex 46dd5ba..32f869b 100644[m
+[1m--- a/example/mandelbrot.asm[m
+[1m+++ b/example/mandelbrot.asm[m
+[36m@@ -1,9588 +1,10157 @@[m
+ bits 64[m
+ default rel[m
+[32m+[m
+ section .bss[m
+[31m-    memory resb 3000[m
+[31m-    memoryPointer resq 1[m
+[31m-    outHandle resd 1[m
+[32m+[m	[32mmemory resb 3000[m
+[32m+[m	[32mmemoryPointer resq 1[m
+[32m+[m	[32moutHandle resd 1[m
+[32m+[m
+ section .text[m
+[31m-global main[m
+[31m-extern ExitProcess[m
+[31m-extern putchar[m
+[31m-extern WriteConsoleA[m
+[31m-extern GetStdHandle[m
+[32m+[m	[32mglobal main[m
+[32m+[m	[32mextern ExitProcess[m
+[32m+[m	[32mextern putchar[m
+[32m+[m	[32mextern WriteConsoleA[m
+[32m+[m	[32mextern GetStdHandle[m
+[32m+[m
+ main:[m
+[31m-    push    rbp[m
+[31m-    mov     rbp, rsp[m
+[31m-    sub     rsp, 32[m
+[31m-    mov     rcx, -11[m
+[31m-    call    GetStdHandle[m
+[31m-    mov     [outHandle], rax[m
+[31m-    mov     rax, memory[m
+[31m-    mov     [memoryPointer], rax[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 13[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE0[m
+[31m-    L0:[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], -1[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 2[m
+[31m-    add     qword [memoryPointer], 3 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 5[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 2[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    add     qword [memoryPointer], -6 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L0[m
+[31m-    LE0:[m
+[31m-    add     qword [memoryPointer], 5 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 6[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], -3[m
+[31m-    add     qword [memoryPointer], 10 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 15[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE1[m
+[31m-    L1:[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE2[m
+[31m-    L2:[m
+[31m-    add     qword [memoryPointer], 9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L2[m
+[31m-    LE2:[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE3[m
+[31m-    L3:[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L3[m
+[31m-    LE3:[m
+[31m-    add     qword [memoryPointer], 9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], -1[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L1[m
+[31m-    LE1:[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE4[m
+[31m-    L4:[m
+[31m-    add     qword [memoryPointer], 8 ;MOV[m
+[31m-    mov     eax, [memoryPointer][m
+[31m-    mov     byte [eax], 0[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L4[m
+[31m-    LE4:[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE5[m
+[31m-    L5:[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L5[m
+[31m-    LE5:[m
+[31m-    add     qword [memoryPointer], 8 ;MOV[m
+[31m-    mov     eax, [memoryPointer][m
+[31m-    mov     byte [eax], 0[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    add     qword [memoryPointer], -7 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 5[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE6[m
+[31m-    L6:[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], -1[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE7[m
+[31m-    L7:[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], -1[m
+[31m-    add     qword [memoryPointer], 9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L7[m
+[31m-    LE7:[m
+[31m-    add     qword [memoryPointer], 9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L6[m
+[31m-    LE6:[m
+[31m-    add     qword [memoryPointer], 7 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    add     qword [memoryPointer], 26 ;MOV[m
+[31m-    add     qword [memoryPointer], 1 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    add     qword [memoryPointer], -17 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE8[m
+[31m-    L8:[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L8[m
+[31m-    LE8:[m
+[31m-    add     qword [memoryPointer], 3 ;MOV[m
+[31m-    mov     eax, [memoryPointer][m
+[31m-    mov     byte [eax], 0[m
+[31m-    mov     eax, [memoryPointer] ;ADD[m
+[31m-    add     byte [eax], 1[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE9[m
+[31m-    L9:[m
+[31m-    add     qword [memoryPointer], 6 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPS[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    je      LE10[m
+[31m-    L10:[m
+[31m-    add     qword [memoryPointer], 7 ;MOV[m
+[31m-    mov     eax, [memoryPointer][m
+[31m-    mov     byte [eax], 0[m
+[31m-    add     qword [memoryPointer], 2 ;MOV[m
+[31m-    mov     eax, [memoryPointer] ;LPE[m
+[31m-    mov     al, [eax][m
+[31m-    cmp     al, 0[m
+[31m-    jne     L10[m
+[31m-    LE10:[m
+[31m-    add     qword [memoryPointer], -9 ;MOV[m
+[31m-    mov     
