@@ -14,7 +14,9 @@ static void replace_at(char** c, const char* p, size_t i, size_t count) {
     memcpy(buffer + i, p, plen * sizeof(char));
     memcpy(buffer + i + 1, *c + i + count, clen - i - count);
 
-    free(*c);
+    if(*c != NULL) {
+        free(*c);
+    }
     *c = buffer;
 }
 
@@ -33,6 +35,10 @@ static void replace_all_occurences(char** ptr, const char* substring, const char
 static void optimize_clear_loops(char** ptr) {
     replace_all_occurences(ptr, "[+]", "0");
     replace_all_occurences(ptr, "[-]", "0");
+}
+
+static void optimize_copy_loops(char** ptr) {
+    replace_all_occurences(ptr, "", "C")
 }
 
 void optimize_code(char** code) {
